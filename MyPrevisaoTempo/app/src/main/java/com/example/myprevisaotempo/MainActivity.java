@@ -14,14 +14,23 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.myprevisaotempo.databinding.ActivityMainBinding;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,5 +81,25 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void GetWeatherRetrifit(){
+        com.example.conversaousdbrl.api.MeteoService meteoService = retrofit.create(com.example.conversaousdbrl.api.MeteoService.class);
+        Call<JsonObject> call = meteoService.GetWeatherJson("-12.97", "-38.51");
+
+        call.enqueue((new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.isSuccessful()){
+                    JsonObject meteo = response.body();
+                    JsonArray date = meteo.get("daily").getAsJsonObject().get("time").getAsJsonArray();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        }));
     }
 }
