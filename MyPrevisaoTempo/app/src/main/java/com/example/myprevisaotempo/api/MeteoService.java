@@ -1,4 +1,4 @@
-package com.example.conversaousdbrl.api;
+package com.example.myprevisaotempo.api;
 
 import com.example.myprevisaotempo.model.Meteo;
 import com.google.gson.JsonObject;

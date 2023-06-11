@@ -17,9 +17,6 @@
         android:theme="@style/Theme.MyPrevisaoTempo"
         tools:targetApi="31">
         <activity
-            android:name=".TestLocationAct"
-            android:exported="false" />
-        <activity
             android:name=".Perfil"
             android:exported="false"
             android:label="@string/title_activity_perfil"
