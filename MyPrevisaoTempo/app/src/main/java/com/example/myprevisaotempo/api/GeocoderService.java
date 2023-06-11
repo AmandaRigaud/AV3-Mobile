@@ -10,7 +10,7 @@ import android.location.LocationManager;
 
 import androidx.core.app.ActivityCompat;
 
-import com.example.myprevisaotempo.Manifest;
+//import com.example.myprevisaotempo.Manifest;
 import com.google.gson.JsonObject;
 
 import retrofit2.Call;

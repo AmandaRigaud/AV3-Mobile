@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        retrofit = new Retrofit.Builder().baseUrl("https://geocode.search.hereapi.com/v1/geocode").addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl("https://geocode.search.hereapi.com/v1/geocode/").addConverterFactory(GsonConverterFactory.create()).build();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
