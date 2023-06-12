@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="temperature_text" type="id" />
+    <item name="weathercode_text_view" type="id" />
+    <item name="min_temp_text_view" type="id" />
+</resources>
