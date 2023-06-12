@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="5sp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/time_day_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="0.5sp"
+        android:fontFamily="monospace"
+        android:text="17/06"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textSize="10sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/max_td_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="0.5sp"
+                android:fontFamily="monospace"
+                android:text="Máx:"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tempM_td_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="26"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/goefhi_text_view_td"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@id/tempM_td_text_view"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="ºC"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="8sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5sp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/min_td_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="0.5sp"
+                android:fontFamily="monospace"
+                android:text="Min:"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tempMi_td_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="26"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/grausMi_text_view_td"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@id/tempMi_td_text_view"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="ºC"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="8sp" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

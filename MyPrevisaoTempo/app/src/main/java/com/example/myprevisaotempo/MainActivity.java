@@ -15,6 +15,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myprevisaotempo.databinding.ActivityMainBinding;
 import com.google.gson.JsonArray;
@@ -57,19 +59,26 @@ public class MainActivity extends AppCompatActivity {
     int PERMISSION_ID = 44;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter myAdapter;
+
     String[] coordinates = new String[2];
     Retrofit retrofit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        recyclerView = findViewById(R.id.recyclerViewMain);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         retrofit = new Retrofit.Builder().baseUrl("https://geocode.search.hereapi.com/v1/geocode/").addConverterFactory(GsonConverterFactory.create()).build();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(findViewById(R.id.toolBar));
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
