@@ -40,7 +40,7 @@ public class Historico extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
-        ListView LV = findViewById(R.id.listview_first);
+        //ListView LV = findViewById(R.id.listview_first);
 
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_historico);

@@ -18,10 +18,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface GeocoderService {
-    @GET("?apiKey=TRBiPqYu8ZF4iEr5jJ8SXSQIfHJVR9c_-jqylOz0D7w")
+    @GET("browse?apiKey=TRBiPqYu8ZF4iEr5jJ8SXSQIfHJVR9c_-jqylOz0D7w")
     Call<JsonObject> GetLocationATJson(@Query("at") String latLon);
 
-    @GET("?apiKey=TRBiPqYu8ZF4iEr5jJ8SXSQIfHJVR9c_-jqylOz0D7w")
+    @GET("geocode?apiKey=TRBiPqYu8ZF4iEr5jJ8SXSQIfHJVR9c_-jqylOz0D7w")
     Call<JsonObject> GetLocationQJson(@Query("q") String local);
 
 }

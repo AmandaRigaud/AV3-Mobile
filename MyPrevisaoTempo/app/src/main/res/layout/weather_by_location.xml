@@ -162,10 +162,10 @@
                 android:id="@+id/temperature_day_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
                 android:elevation="0.5sp"
                 android:fontFamily="monospace"
-                android:layout_marginTop="20sp"
-                android:text="Temperaturas no dia:"
+                android:text="Temperatura 24H:"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textSize="25sp" />
 

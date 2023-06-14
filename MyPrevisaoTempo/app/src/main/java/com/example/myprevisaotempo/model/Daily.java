@@ -6,18 +6,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Daily {
-    @SerializedName("time")
-    List<String> time = new ArrayList<String>();
-    @SerializedName("temperature_2m_max")
-    List<String> temperature_2m_max = new ArrayList<String>();
-    @SerializedName("temperature_2m_min")
-    List<String> temperature_2m_min = new ArrayList<String>();
-    @SerializedName("sunrise")
-    List<String> sunrise = new ArrayList<String>();
-    @SerializedName("sunset")
-    List<String> sunset = new ArrayList<String>();
 
-    public List<String> getTime() {
+    List<String> time;
+    List<String> temperature_2m_max;
+    List<String> temperature_2m_min;
+    List<String> sunrise;
+    List<String> sunset;
+
+    public Daily(List<String> time, List<String> temperature_2m_max, List<String> temperature_2m_min, List<String> sunrise, List<String> sunset) {
+        this.time = time;
+        this.temperature_2m_max = temperature_2m_max;
+        this.temperature_2m_min = temperature_2m_min;
+        this.sunrise = sunrise;
+        this.sunset = sunset;
+    }
+
+    public String getTime(int posi) {
+        return time.get(posi);
+    }
+
+    public List<String> getTimeList() {
         return time;
     }
 
@@ -25,7 +33,11 @@ public class Daily {
         this.time = time;
     }
 
-    public List<String> getTemperature_2m_max() {
+    public String getTemperature_2m_max(int posi) {
+        return temperature_2m_max.get(posi);
+    }
+
+    public List<String> getTemperature_2m_maxList() {
         return temperature_2m_max;
     }
 
@@ -33,7 +45,11 @@ public class Daily {
         this.temperature_2m_max = temperature_2m_max;
     }
 
-    public List<String> getTemperature_2m_min() {
+    public String getTemperature_2m_min(int posi) {
+        return temperature_2m_min.get(posi);
+    }
+
+    public List<String> getTemperature_2m_minList() {
         return temperature_2m_min;
     }
 
@@ -41,7 +57,11 @@ public class Daily {
         this.temperature_2m_min = temperature_2m_min;
     }
 
-    public List<String> getSunrise() {
+    public String getSunrise(int posi) {
+        return sunrise.get(posi);
+    }
+
+    public List<String> getSunriseList() {
         return sunrise;
     }
 
@@ -49,12 +69,15 @@ public class Daily {
         this.sunrise = sunrise;
     }
 
-    public List<String> getSunset() {
+    public String getSunset(int posi) {
+        return sunset.get(posi);
+    }
+
+    public List<String> getSunsetList(int posi) {
         return sunset;
     }
 
     public void setSunset(List<String> sunset) {
         this.sunset = sunset;
     }
-
 }

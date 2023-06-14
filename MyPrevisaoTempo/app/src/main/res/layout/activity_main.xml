@@ -11,7 +11,7 @@
         layout="@layout/toolbar" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMain"
+        android:id="@+id/recycler_main_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

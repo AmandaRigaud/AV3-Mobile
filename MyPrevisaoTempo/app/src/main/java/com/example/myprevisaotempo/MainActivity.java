@@ -2,14 +2,15 @@ package com.example.myprevisaotempo;
 
 import android.os.Bundle;
 
-import com.example.myprevisaotempo.api.GeocoderService;
 import com.example.myprevisaotempo.api.MeteoService;
+import com.example.myprevisaotempo.databinding.ActivityMainBinding;
+import com.example.myprevisaotempo.model.Daily;
+import com.example.myprevisaotempo.model.Geocoder;
+import com.example.myprevisaotempo.model.Hourly;
+import com.example.myprevisaotempo.model.Meteo;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -18,13 +19,11 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myprevisaotempo.databinding.ActivityMainBinding;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -40,13 +39,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,39 +64,46 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter myAdapter;
 
-    String[] coordinates = new String[2];
     Retrofit retrofit;
 
+    ArrayList<Meteo> meteos = new ArrayList<Meteo>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.recyclerViewMain);
+        recyclerView = findViewById(R.id.recycler_main_view);
+
+        myAdapter = new DailyAdapter(meteos);
+        recyclerView.setAdapter(myAdapter);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        retrofit = new Retrofit.Builder().baseUrl("https://geocode.search.hereapi.com/v1/geocode/").addConverterFactory(GsonConverterFactory.create()).build();
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+
+        retrofit = new Retrofit.Builder().baseUrl("https://api.open-meteo.com/v1/").addConverterFactory(GsonConverterFactory.create()).build();
+
+        //binding = ActivityMainBinding.inflate(getLayoutInflater());
+        //setContentView(binding.getRoot());
 
         setSupportActionBar(findViewById(R.id.toolBar));
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        /**NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);**/
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
-        GetWeatherRetrifit(coordinates[0], coordinates[1]);
 
 
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        /**binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });**/
+
     }
 
     @Override
@@ -129,15 +137,73 @@ public class MainActivity extends AppCompatActivity {
 
     private void GetWeatherRetrifit(String lat, String lon){
         MeteoService meteoService = retrofit.create(MeteoService.class);
+        String latLon = lat + ","+ lon;
+        Geocoder geo = new Geocoder();
+        geo.atCallGeo(latLon);
+        Meteo meteoOne = new Meteo(null, lat, lon, null, null);
         Call<JsonObject> call = meteoService.GetWeatherJson(lat, lon);
 
         call.enqueue((new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                System.out.println("Call GetW: " + call.request());
                 if(response.isSuccessful()){
+
+                    List<String> timeList = new ArrayList<String>();
+                    List<String> temperature_2mList = new ArrayList<String>();
+                    List<String> precipitation_probabilityList = new ArrayList<String>();
+                    List<String> weathercodeList = new ArrayList<String>();
+                    List<String> temperature_1mList = new ArrayList<String>();
+                    List<String> sunriseList = new ArrayList<String>();
+                    List<String> sunsetList = new ArrayList<String>();
+
+                    System.out.println(response.body());
                     JsonObject meteo = response.body();
-                    JsonArray date = meteo.get("daily").getAsJsonObject().get("time").getAsJsonArray();
+                    JsonArray timeH = meteo.get("hourly").getAsJsonObject().get("time").getAsJsonArray();
+                    JsonArray temperatureH = meteo.get("hourly").getAsJsonObject().get("temperature_2m").getAsJsonArray();
+                    JsonArray precipitation_probabilityH = meteo.get("hourly").getAsJsonObject().get("precipitation_probability").getAsJsonArray();
+                    JsonArray weathercodeH = meteo.get("hourly").getAsJsonObject().get("weathercode").getAsJsonArray();
+                    JsonArray timeD = meteo.get("daily").getAsJsonObject().get("time").getAsJsonArray();
+                    JsonArray temperatureMaxD = meteo.get("daily").getAsJsonObject().get("temperature_2m_max").getAsJsonArray();
+                    JsonArray temperatureMinD = meteo.get("daily").getAsJsonObject().get("temperature_2m_min").getAsJsonArray();
+                    JsonArray sunriseD = meteo.get("daily").getAsJsonObject().get("sunrise").getAsJsonArray();
+                    JsonArray sunsetD = meteo.get("daily").getAsJsonObject().get("sunset").getAsJsonArray();
+
+                    for(int i=0; i<timeD.size(); i++){
+                        timeList.add(timeD.get(i).toString());
+                        temperature_2mList.add(temperatureMaxD.get(i).toString());
+                        temperature_1mList.add(temperatureMinD.get(i).toString());
+                        sunriseList.add(sunriseD.get(i).toString());
+                        sunsetList.add(sunsetD.get(i).toString());
+                    }
+
+                    Daily newDaily = new Daily(timeList, temperature_2mList, temperature_1mList, sunriseList, sunsetList);
+
+                    timeList.clear();
+                    temperature_2mList.clear();
+
+                    for(int j=0; j<timeH.size(); j++){
+                        timeList.add(timeH.get(j).toString());
+                        temperature_2mList.add(temperatureH.get(j).toString());
+                        precipitation_probabilityList.add(precipitation_probabilityH.get(j).toString());
+                        weathercodeList.add(weathercodeH.get(j).toString());
+                    }
+
+                    Hourly newHourly = new Hourly(timeList, temperature_2mList, precipitation_probabilityList, weathercodeList);
+
+                    meteoOne.setDaily(newDaily);
+                    meteoOne.setHourly(newHourly);
+                    meteoOne.setLocal(geo.getLocal());
+                    meteos.add(meteoOne);
+
+                    System.out.print("Meteo: " );
+                    System.out.println(meteoOne);
+                    System.out.println("Local: " + meteoOne.getLocal());
+
+                    myAdapter.notifyDataSetChanged();
                 }
+
+                System.out.println("Fora do if");
             }
 
             @Override
@@ -159,10 +225,9 @@ public class MainActivity extends AppCompatActivity {
                         if (location == null) {
                             requestNewLocationData();
                         } else {
-                            System.out.println("Latitude: " + location.getLatitude());
-                            System.out.println("Longitude: " + location.getLongitude());
-                            coordinates[0] = Double.toString(location.getLatitude());
-                            coordinates[1] = Double.toString(location.getLongitude());
+                            System.out.println("Latitude On: " + location.getLatitude());
+                            System.out.println("Longitude On: " + location.getLongitude());
+                            GetWeatherRetrifit(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));
                         }
                     }
                 });
@@ -198,10 +263,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location mLastLocation = locationResult.getLastLocation();
-            System.out.println("Latitude: " + mLastLocation.getLatitude());
-            System.out.println("Longitude: " + mLastLocation.getLongitude());
-            coordinates[0] = Double.toString(mLastLocation.getLatitude());
-            coordinates[1] = Double.toString(mLastLocation.getLongitude());
+            System.out.println("Latitude Location: " + mLastLocation.getLatitude());
+            System.out.println("Longitude Location: " + mLastLocation.getLongitude());
+            GetWeatherRetrifit(Double.toString(mLastLocation.getLatitude()), Double.toString(mLastLocation.getLongitude()));
         }
     };
 

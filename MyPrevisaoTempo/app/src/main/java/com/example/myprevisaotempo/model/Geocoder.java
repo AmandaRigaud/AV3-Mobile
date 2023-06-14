@@ -18,9 +18,16 @@ public class Geocoder {
     String local;
     String[] coord = new String[2];
 
+    public String getLocal() {
+        return local;
+    }
 
-    public String atCallGeo(String latLon){
-        retrofit = new Retrofit.Builder().baseUrl("https://browse.search.hereapi.com/v1/browse?").addConverterFactory(GsonConverterFactory.create()).build();
+    public void setLocal(String local) {
+        this.local = local;
+    }
+
+    public void atCallGeo(String latLon){
+        retrofit = new Retrofit.Builder().baseUrl("https://browse.search.hereapi.com/v1/").addConverterFactory(GsonConverterFactory.create()).build();
         geoService = retrofit.create(GeocoderService.class);
 
         Call<JsonObject> call = geoService.GetLocationATJson(latLon);
@@ -31,8 +38,7 @@ public class Geocoder {
                 if(response.isSuccessful()) {
                     JsonObject meteo = response.body();
                     JsonArray items = meteo.get("items").getAsJsonArray();
-                    local = items.get(0).getAsJsonObject().get("address").getAsJsonObject().get("city").getAsString();
-                    System.out.println("Local:" + local);
+                    setLocal(items.get(0).getAsJsonObject().get("address").getAsJsonObject().get("city").getAsString());
                 }
             }
 
@@ -41,12 +47,10 @@ public class Geocoder {
 
             }
         }));
-
-        return local;
     }
 
     public String[] qCallGeo(String latLon){
-        retrofit = new Retrofit.Builder().baseUrl("https://geocode.search.hereapi.com/v1/geocode").addConverterFactory(GsonConverterFactory.create()).build();
+        retrofit = new Retrofit.Builder().baseUrl("https://geocode.search.hereapi.com/v1/").addConverterFactory(GsonConverterFactory.create()).build();
         geoService = retrofit.create(GeocoderService.class);
 
 
