@@ -3,7 +3,6 @@ package com.example.myprevisaotempo;
 import android.os.Bundle;
 
 import com.example.myprevisaotempo.api.MeteoService;
-import com.example.myprevisaotempo.databinding.ActivityMainBinding;
 import com.example.myprevisaotempo.model.Daily;
 import com.example.myprevisaotempo.model.Geocoder;
 import com.example.myprevisaotempo.model.Hourly;
@@ -34,6 +33,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,9 +66,9 @@ public class MainActivity extends AppCompatActivity {
     FusedLocationProviderClient mFusedLocationClient;
     int PERMISSION_ID = 44;
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private RelativeLayout load;
     private TextView localText;
-
+    private ImageButton searchButton;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter myAdapter;
 
@@ -81,6 +84,20 @@ public class MainActivity extends AppCompatActivity {
 
         localText = findViewById(R.id.user_name_text_view);
         recyclerView = findViewById(R.id.recycler_main_view);
+        load = findViewById(R.id.loadingPanel);
+        searchButton = findViewById(R.id.btn_search);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent intent = new Intent(MainActivity.this, FavoritosActivity.class);
+                //startActivity(intent);
+                //finish();
+            }
+        });
+
+        load.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
 
         myAdapter = new DailyAdapter(meteos);
         recyclerView.setAdapter(myAdapter);
@@ -93,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -105,6 +123,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        load.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override
