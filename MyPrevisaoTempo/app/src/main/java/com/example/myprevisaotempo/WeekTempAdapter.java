@@ -45,7 +45,7 @@ public class WeekTempAdapter extends RecyclerView.Adapter<WeekTempAdapter.ViewHo
         String[] dateSplit = date.get(position).split("T");
         String[] dateD = dateSplit[0].split("-");
 
-        holder.dateText.setText(dateD[2]+"-"+dateD[1]);
+        holder.dateText.setText(dateD[2].substring(0, dateD[2].length() - 1)+"-"+dateD[1]);
         holder.maxTempText.setText(temperatures_max.get(position));
         holder.minTempText.setText(temperatures_min.get(position));
     }

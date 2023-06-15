@@ -67,16 +67,16 @@ public class Geocoder {
         return future;
     }
 
-
-    public CompletableFuture<String[]> qCallGeo(String latLon) {
+    public CompletableFuture<String[]> qCallGeo(String local) {
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://geocode.search.hereapi.com/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+
         geoService = retrofit.create(GeocoderService.class);
 
         System.out.println("Qcall");
-        Call<JsonObject> call = geoService.GetLocationQJson(latLon);
+        Call<JsonObject> call = geoService.GetLocationQJson(local);
 
         CompletableFuture<String[]> future = new CompletableFuture<>();
 

@@ -3,7 +3,6 @@ package com.example.myprevisaotempo;
 import android.os.Bundle;
 
 import com.example.myprevisaotempo.api.MeteoService;
-import com.example.myprevisaotempo.databinding.ActivityMainBinding;
 import com.example.myprevisaotempo.model.Daily;
 import com.example.myprevisaotempo.model.Geocoder;
 import com.example.myprevisaotempo.model.Hourly;
@@ -38,6 +37,9 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,8 +52,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,25 +72,47 @@ public class MainActivity extends AppCompatActivity {
     FusedLocationProviderClient mFusedLocationClient;
     int PERMISSION_ID = 44;
     private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
-
+    private RelativeLayout load;
+    private TextView localText;
+    private ImageButton searchButton;
     private RecyclerView recyclerView;
     private static RecyclerView.Adapter myAdapter;
+
 
     static Retrofit retrofit;
     private ImageButton btn_home;
     static ArrayList<Meteo> meteos = new ArrayList<Meteo>();
     public static HashMap<String, Integer> meteoMap = new HashMap<String,Integer>();
+  
+    int pagePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        localText = findViewById(R.id.user_name_text_view);
         recyclerView = findViewById(R.id.recycler_main_view);
+
+        load = findViewById(R.id.loadingPanel);
+        searchButton = findViewById(R.id.btn_search);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent intent = new Intent(MainActivity.this, FavoritosActivity.class);
+                //startActivity(intent);
+                //finish();
+            }
+        });
+
+        load.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+      
         Context c = this;
         DBInterface.setPath(c.getFilesDir().toString());
         DBInterface.criarBanco();
+
         myAdapter = new DailyAdapter(meteos);
         recyclerView.setAdapter(myAdapter);
 
@@ -93,13 +120,9 @@ public class MainActivity extends AppCompatActivity {
 
         retrofit = new Retrofit.Builder().baseUrl("https://api.open-meteo.com/v1/").addConverterFactory(GsonConverterFactory.create()).build();
 
-
-
-
-
-        System.out.println("OnCreate v2");
         setSupportActionBar(findViewById(R.id.toolBar));
         btn_home = findViewById(R.id.btn_home);
+      
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,11 +133,24 @@ public class MainActivity extends AppCompatActivity {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if(newState == RecyclerView.SCROLL_STATE_SETTLING){
+                    pagePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                    localText.setText(meteos.get(pagePosition).getLocal());
+
+                }
+            }
+        });
+
+        load.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+  
         FillMeteo();
-        for(Meteo i :meteos){
-            System.out.println("Meteos::::" + i.getLatitude());
-        }
-        System.out.println("FillMeteo?");
     }
 
     @Override
@@ -178,7 +214,9 @@ public class MainActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
 
                     List<String> timeList = new ArrayList<String>();
+                    List<String> timeList2 = new ArrayList<String>();
                     List<String> temperature_2mList = new ArrayList<String>();
+                    List<String> temperature_2mList2 = new ArrayList<String>();
                     List<String> precipitation_probabilityList = new ArrayList<String>();
                     List<String> weathercodeList = new ArrayList<String>();
                     List<String> temperature_1mList = new ArrayList<String>();
@@ -205,27 +243,31 @@ public class MainActivity extends AppCompatActivity {
                         sunsetList.add(sunsetD.get(i).toString());
                     }
 
+                    System.out.print("TimeD: ");
+                    System.out.println(timeD);
+                    System.out.print("TimeList: ");
+                    System.out.println(timeList);
                     Daily newDaily = new Daily(timeList, temperature_2mList, temperature_1mList, sunriseList, sunsetList);
 
-                    timeList.clear();
-                    temperature_2mList.clear();
-
                     for(int j=0; j<timeH.size(); j++){
-                        timeList.add(timeH.get(j).toString());
-                        temperature_2mList.add(temperatureH.get(j).toString());
+                        timeList2.add(timeH.get(j).toString());
+                        temperature_2mList2.add(temperatureH.get(j).toString());
                         precipitation_probabilityList.add(precipitation_probabilityH.get(j).toString());
                         weathercodeList.add(weathercodeH.get(j).toString());
                     }
 
-                    Hourly newHourly = new Hourly(timeList, temperature_2mList, precipitation_probabilityList, weathercodeList);
+                    Hourly newHourly = new Hourly(timeList2, temperature_2mList2, precipitation_probabilityList, weathercodeList);
 
                     meteoOne.setLocal(cidade);
                     meteoOne.setDaily(newDaily);
                     meteoOne.setHourly(newHourly);
 
+                    //TODO: Verificar se o obj já existe na lista. Se sim, atualizar. Se não, add.
+  
                     if (meteos.size() == 0) {
                         meteos.add(meteoOne);
                     }
+
                     meteos.add(meteoOne);
 
                     System.out.print("Meteo: " );
@@ -505,3 +547,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+

@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5sp"
+    android:layout_margin="15sp"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -14,6 +14,7 @@
         android:elevation="0.5sp"
         android:fontFamily="monospace"
         android:layout_marginTop="5sp"
+        android:layout_marginBottom="4sp"
         android:text="17:00H"
         android:textAppearance="?android:textAppearanceLarge"
         android:textSize="12sp" />
@@ -21,6 +22,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4sp"
         android:orientation="horizontal">
 
         <TextView
@@ -67,8 +69,8 @@
             android:id="@+id/water_drop_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
             android:src="@drawable/baseline_cloud_24"></ImageView>
 
     </LinearLayout>

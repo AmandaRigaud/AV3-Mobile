@@ -13,22 +13,26 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/how_is_the_weather_removebg_preview"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPrevisaoTempo"
         tools:targetApi="31">
         <activity
-            android:name=".Pesquisa"
-            android:exported="false" />
+            android:name=".OpenScreenAct"
+            android:exported="true"
+            android:theme="@style/Theme.MyPrevisaoTempo.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Historico"
             android:exported="false"
             android:label="@string/title_activity_historico"
-            android:theme="@style/Theme.MyPrevisaoTempo" />
-        <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
+            android:theme="@style/Theme.MyPrevisaoTempo.NoActionBar" />
         <activity
             android:name=".Perfil"
             android:exported="false"
@@ -41,15 +45,9 @@
             android:theme="@style/Theme.MyPrevisaoTempo.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.MyPrevisaoTempo.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false"
+            android:theme="@style/Theme.MyPrevisaoTempo.NoActionBar"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
