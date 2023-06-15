@@ -132,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
 
                     List<String> timeList = new ArrayList<String>();
+                    List<String> timeList2 = new ArrayList<String>();
                     List<String> temperature_2mList = new ArrayList<String>();
+                    List<String> temperature_2mList2 = new ArrayList<String>();
                     List<String> precipitation_probabilityList = new ArrayList<String>();
                     List<String> weathercodeList = new ArrayList<String>();
                     List<String> temperature_1mList = new ArrayList<String>();
@@ -159,23 +161,26 @@ public class MainActivity extends AppCompatActivity {
                         sunsetList.add(sunsetD.get(i).toString());
                     }
 
+                    System.out.print("TimeD: ");
+                    System.out.println(timeD);
+                    System.out.print("TimeList: ");
+                    System.out.println(timeList);
                     Daily newDaily = new Daily(timeList, temperature_2mList, temperature_1mList, sunriseList, sunsetList);
 
-                    timeList.clear();
-                    temperature_2mList.clear();
-
                     for(int j=0; j<timeH.size(); j++){
-                        timeList.add(timeH.get(j).toString());
-                        temperature_2mList.add(temperatureH.get(j).toString());
+                        timeList2.add(timeH.get(j).toString());
+                        temperature_2mList2.add(temperatureH.get(j).toString());
                         precipitation_probabilityList.add(precipitation_probabilityH.get(j).toString());
                         weathercodeList.add(weathercodeH.get(j).toString());
                     }
 
-                    Hourly newHourly = new Hourly(timeList, temperature_2mList, precipitation_probabilityList, weathercodeList);
+                    Hourly newHourly = new Hourly(timeList2, temperature_2mList2, precipitation_probabilityList, weathercodeList);
 
                     meteoOne.setDaily(newDaily);
                     meteoOne.setHourly(newHourly);
                     meteoOne.setLocal(geo.getLocal());
+
+                    //TODO: Verificar se o obj já existe na lista. Se sim, atualizar. Se não, add.
                     meteos.add(meteoOne);
 
                     System.out.print("Meteo: " );

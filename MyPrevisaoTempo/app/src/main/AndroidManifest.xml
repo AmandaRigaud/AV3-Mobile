@@ -22,9 +22,6 @@
             android:label="@string/title_activity_historico"
             android:theme="@style/Theme.MyPrevisaoTempo" />
         <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
             android:name=".Perfil"
             android:exported="false"
             android:label="@string/title_activity_perfil"

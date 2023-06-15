@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5sp"
+    android:layout_margin="17sp"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -10,11 +10,12 @@
         android:id="@+id/time_day_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5sp"
         android:elevation="0.5sp"
         android:fontFamily="monospace"
         android:text="17/06"
         android:textAppearance="?android:textAppearanceLarge"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -72,7 +73,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5sp"
+            android:layout_marginLeft="10sp"
             android:gravity="center"
             android:orientation="vertical">
 

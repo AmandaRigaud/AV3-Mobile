@@ -1,243 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="6sp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10sp">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout
+        android:id="@+id/linear_lay_w"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@id/weathercode_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:elevation="0.5sp"
+            android:fontFamily="monospace"
+            android:text="Nublado"
+            android:textAlignment="center"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/temperature_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2sp"
+            android:elevation="0.5sp"
+            android:fontFamily="monospace"
+            android:text="26"
+            android:textAlignment="center"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textSize="120sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:id="@+id/relaitveMinG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@id/min_temp_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="24"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/gc_text_view_td"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@id/min_temp_text_view"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="ºC"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="19sp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/barra_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6sp"
+                android:layout_marginRight="8sp"
+                android:layout_toEndOf="@+id/relaitveMinG"
+                android:elevation="0.5sp"
+                android:fontFamily="monospace"
+                android:text="-"
+                android:textAlignment="center"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textSize="30sp" />
+
+            <RelativeLayout
+                android:id="@+id/relaitveMaxG"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/barra_text_view"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/max_temp_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="30"
+                    android:textAlignment="textStart"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/gc_text_two_td"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@id/max_temp_text_view"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="ºC"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="19sp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40sp"
             android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@id/weathercode_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="0.5sp"
-                android:fontFamily="monospace"
-                android:textAlignment="center"
-                android:text="Nublado"
-                android:layout_marginTop="5sp"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="40sp" />
-
-            <TextView
-                android:id="@+id/temperature_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:elevation="0.5sp"
-                android:text="26"
-                android:fontFamily="monospace"
-                android:layout_marginBottom="2sp"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="120sp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_centerHorizontal="true">
-
-                <RelativeLayout
-                    android:id="@+id/relaitveMinG"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@id/min_temp_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:elevation="0.5sp"
-                        android:fontFamily="monospace"
-                        android:text="24"
-                        android:textAlignment="textEnd"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="30sp" />
-
-                    <TextView
-                        android:id="@+id/gc_text_view_td"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_toRightOf="@id/min_temp_text_view"
-                        android:elevation="0.5sp"
-                        android:fontFamily="monospace"
-                        android:text="ºC"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="19sp" />
-
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/barra_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6sp"
-                    android:layout_marginRight="8sp"
-                    android:layout_toEndOf="@+id/relaitveMinG"
-                    android:elevation="0.5sp"
-                    android:fontFamily="monospace"
-                    android:text="-"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:textSize="30sp" />
-
-                <RelativeLayout
-                    android:id="@+id/relaitveMaxG"
-                    android:layout_toEndOf="@+id/barra_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/max_temp_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:elevation="0.5sp"
-                        android:fontFamily="monospace"
-                        android:text="30"
-                        android:textAlignment="textStart"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="30sp" />
-
-                    <TextView
-                        android:id="@+id/gc_text_two_td"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_toRightOf="@id/max_temp_text_view"
-                        android:elevation="0.5sp"
-                        android:fontFamily="monospace"
-                        android:text="ºC"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="19sp" />
-
-                </RelativeLayout>
-
-            </RelativeLayout>
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30sp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10sp"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/sunrise_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="2sp"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="Nascer do sol:"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="15sp" />
 
-                    <TextView
-                        android:id="@+id/sunrise_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2sp"
-                        android:elevation="0.5sp"
-                        android:text="Nascer do sol:"
-                        android:fontFamily="monospace"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/sunrise_time_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:elevation="0.5sp"
-                        android:fontFamily="monospace"
-                        android:text="05:00H"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="25sp" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0.5dp"
-                    android:layout_weight="0.5" />
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/sunrise_time_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/sunset_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:elevation="0.5sp"
-                        android:layout_marginBottom="2sp"
-                        android:text="Pôr do sol:"
-                        android:fontFamily="monospace"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/sunset_time_text_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:elevation="0.5sp"
-                        android:fontFamily="monospace"
-                        android:text="17:42H"
-                        android:textAppearance="?android:textAppearanceLarge"
-                        android:textSize="25sp" />
-
-                </LinearLayout>
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="05:00H"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="25sp" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/temperature_day_text_view"
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0.5dp"
+                android:layout_weight="0.5" />
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"
-                android:elevation="0.5sp"
-                android:fontFamily="monospace"
-                android:text="Temperatura 24H:"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="25sp" />
+                android:gravity="center_horizontal"
+                android:layout_marginRight="10sp"
+                android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/temperature_day_rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="horizontal"
-                android:orientation="horizontal"
-                android:layout_marginTop="15dp"/>
+                <TextView
+                    android:id="@+id/sunset_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2sp"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="Pôr do sol:"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/temperature_week_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:elevation="0.5sp"
-                android:fontFamily="monospace"
-                android:layout_marginTop="20sp"
-                android:text="Temperaturas na semana:"
-                android:textAppearance="?android:textAppearanceLarge"
-                android:textSize="25sp" />
+                <TextView
+                    android:id="@+id/sunset_time_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="0.5sp"
+                    android:fontFamily="monospace"
+                    android:text="17:42H"
+                    android:textAppearance="?android:textAppearanceLarge"
+                    android:textSize="25sp" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/temperature_week_rv"
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:scrollbars="horizontal"
-                android:layout_height="match_parent"
-                android:layout_marginTop="15dp"/>
+            </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/temperature_day_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28sp"
+        android:elevation="0.5sp"
+        android:fontFamily="monospace"
+        android:text="Temperatura 24H:"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_lay_w" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/temperature_day_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:nestedScrollingEnabled="false"
+        android:layout_marginRight="10sp"
+        android:layout_marginLeft="10sp"
+        app:layout_constraintTop_toBottomOf="@id/temperature_day_text_view"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <TextView
+        android:id="@+id/temperature_week_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28sp"
+        android:elevation="0.5sp"
+        android:fontFamily="monospace"
+        android:text="Temperaturas na semana:"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/temperature_day_rv" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/temperature_week_rv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:layout_marginRight="10sp"
+        android:layout_marginLeft="10sp"
+        app:layout_constraintTop_toBottomOf="@id/temperature_week_text_view"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

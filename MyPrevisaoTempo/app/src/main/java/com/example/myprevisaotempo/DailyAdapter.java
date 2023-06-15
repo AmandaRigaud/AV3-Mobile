@@ -1,6 +1,7 @@
 package com.example.myprevisaotempo;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -52,8 +53,34 @@ public class DailyAdapter  extends RecyclerView.Adapter<DailyAdapter.ViewHolder>
             layoutManagerTwo = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             weekTempRecycler.setLayoutManager(layoutManagerOne);
             dayTempRecycler.setLayoutManager(layoutManagerTwo);
-            weekTempRecycler.setNestedScrollingEnabled(true);
-            dayTempRecycler.setNestedScrollingEnabled(true);
+            //weekTempRecycler.setNestedScrollingEnabled(true);
+            //dayTempRecycler.setNestedScrollingEnabled(true);
+
+            RecyclerView.OnItemTouchListener mScrollTouchListener = new RecyclerView.OnItemTouchListener(){
+
+                @Override
+                public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                    int action = e.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_MOVE:
+                            rv.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
+                    }
+                    return false;
+                }
+                @Override
+                public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+                }
+
+                @Override
+                public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                }
+            };
+
+            dayTempRecycler.addOnItemTouchListener(mScrollTouchListener);
+            weekTempRecycler.addOnItemTouchListener(mScrollTouchListener);
         }
     }
 
@@ -80,6 +107,7 @@ public class DailyAdapter  extends RecyclerView.Adapter<DailyAdapter.ViewHolder>
         String[] sunrise = daily.getSunrise(0).split("T");
         int index = timeLH.indexOf('"' + currentDateTime + '"');
 
+
         holder.weatherText.setText(weat.getCode("CODE_"+hourly.getWeathercode(index)));
         holder.actuTemperatureText.setText(hourly.getTemperature_2m(index));
         holder.minTempText.setText(daily.getTemperature_2m_min(0));
@@ -90,7 +118,7 @@ public class DailyAdapter  extends RecyclerView.Adapter<DailyAdapter.ViewHolder>
         holder.myDayAdapter = new DayTempAdapter(hourly.getTimeList().subList(index,index+24), hourly.getTemperature_2mList().subList(index,index+24), hourly.getPrecipitation_probabilityList().subList(index,index+24));
         holder.dayTempRecycler.setAdapter(holder.myDayAdapter);
 
-        holder.myWeekAdapter = new WeekTempAdapter(daily.getTimeList().subList(1, 3), daily.getTemperature_2m_maxList().subList(1, 3), daily.getTemperature_2m_minList().subList(1, 3));
+        holder.myWeekAdapter = new WeekTempAdapter(daily.getTimeList().subList(1, 5), daily.getTemperature_2m_maxList().subList(1, 5), daily.getTemperature_2m_minList().subList(1, 5));
         holder.weekTempRecycler.setAdapter(holder.myWeekAdapter);
     }
 
