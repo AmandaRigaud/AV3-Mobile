@@ -1,7 +1,9 @@
 package com.example.myprevisaotempo.model;
 
+import android.app.Activity;
 import android.content.Context;
 
+import com.example.myprevisaotempo.MainActivity;
 import com.example.myprevisaotempo.api.GeocoderService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -15,6 +17,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Geocoder {
     GeocoderService geoService;
     Retrofit retrofit;
+
+    public static String lastLocation;
     String local;
     String[] coord = new String[2];
 
@@ -38,7 +42,7 @@ public class Geocoder {
                 if(response.isSuccessful()) {
                     JsonObject meteo = response.body();
                     JsonArray items = meteo.get("items").getAsJsonArray();
-                    setLocal(items.get(0).getAsJsonObject().get("address").getAsJsonObject().get("city").getAsString());
+                    lastLocation = items.get(0).getAsJsonObject().get("address").getAsJsonObject().get("city").getAsString();
                 }
             }
 

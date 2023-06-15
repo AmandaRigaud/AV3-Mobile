@@ -47,7 +47,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     Retrofit retrofit;
 
     ArrayList<Meteo> meteos = new ArrayList<Meteo>();
+    HashMap<String, Integer> meteoMap = new HashMap<String,Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recycler_main_view);
-
+        Context c = this;
+        DBInterface.setPath(c.getFilesDir().toString());
+        DBInterface.criarBanco();
         myAdapter = new DailyAdapter(meteos);
         recyclerView.setAdapter(myAdapter);
 
@@ -121,7 +127,12 @@ public class MainActivity extends AppCompatActivity {
         MeteoService meteoService = retrofit.create(MeteoService.class);
         String latLon = lat + ","+ lon;
         Geocoder geo = new Geocoder();
-        geo.atCallGeo(latLon);
+
+        CompletableFuture<String> taskGeo = CompletableFuture.supplyAsync(() -> {
+            geo.atCallGeo(latLon);
+            return geo.lastLocation;
+        });
+        String cidade = taskGeo.join();
         Meteo meteoOne = new Meteo(null, lat, lon, null, null);
         Call<JsonObject> call = meteoService.GetWeatherJson(lat, lon);
 
@@ -173,10 +184,16 @@ public class MainActivity extends AppCompatActivity {
 
                     Hourly newHourly = new Hourly(timeList, temperature_2mList, precipitation_probabilityList, weathercodeList);
 
+                    meteoOne.setLocal(cidade);
                     meteoOne.setDaily(newDaily);
                     meteoOne.setHourly(newHourly);
-                    meteoOne.setLocal(geo.getLocal());
-                    meteos.add(meteoOne);
+                    DBInterface.InserirHistorico(lat, lon, cidade);
+                    if(meteoMap.containsKey(cidade)){
+                        meteos.set(meteoMap.get(cidade), meteoOne);
+                    }else {
+                        meteoMap.put(cidade, meteos.toArray().length);
+                        meteos.add(meteoOne);
+                    }
 
                     System.out.print("Meteo: " );
                     System.out.println(meteoOne);

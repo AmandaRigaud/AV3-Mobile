@@ -12,10 +12,13 @@ package com.example.myprevisaotempo;
 
 public class DBInterface {
     public static SQLiteDatabase TempoDB;
+    public static String path;
 
-    public void criarBanco() {
+    public static void setPath(String p){path = p;}
+
+    public static void criarBanco() {
         try {
-            TempoDB = SQLiteDatabase.openOrCreateDatabase("Myprevisaotempo", null);
+            TempoDB = SQLiteDatabase.openOrCreateDatabase( path+"Myprevisaotempo", null);
             TempoDB.execSQL("CREATE TABLE IF NOT EXISTS Historico( " +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "Cidade VARCHAR," +
@@ -27,17 +30,29 @@ public class DBInterface {
         }
     }
 
-    public void InserirHistorico(String Latitude, String Longitude, String Cidade) {
-        TempoDB = SQLiteDatabase.openOrCreateDatabase("Myprevisaotempo", null);
-        String Add = "Insert into Historico (Cidade, Latitude, Longitude) VALUES (" + Cidade + "," + Latitude + "," + Longitude + ")";
-        TempoDB.execSQL(Add);
+    public static void InserirHistorico(String Latitude, String Longitude, String Cidade) {
+        try {
+            TempoDB = SQLiteDatabase.openOrCreateDatabase(path+"Myprevisaotempo", null);
+            String Add = "Insert into Historico (Cidade, Latitude, Longitude) VALUES (" + Cidade + "," + Latitude + "," + Longitude + ")";
+            TempoDB.execSQL(Add);
+            TempoDB.close();
+            System.out.println("CRIOU A DB");
+        }catch(Exception e){
+            e.printStackTrace();
+            }
     }
 
-    public void InserirHistorico(String Latitude, String Longitude) {
-        TempoDB = SQLiteDatabase.openOrCreateDatabase("Myprevisaotempo", null);
-        String Add = "Insert into Historico (Cidade, Latitude, Longitude) VALUES (" + "Not Specified" + "," + Latitude + "," + Longitude + ")";
-        TempoDB.execSQL(Add);
-    }
+    public static void InserirHistorico(String Latitude, String Longitude) {
+        try {
+            TempoDB = SQLiteDatabase.openOrCreateDatabase(path+"Myprevisaotempo", null);
+            String Add = "Insert into Historico (Cidade, Latitude, Longitude) VALUES (" + "Not Specified" + "," + Latitude + "," + Longitude + ")";
+            TempoDB.execSQL(Add);
+            TempoDB.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        }
 
     public static ArrayList<SaidaDB> ReturnList() {
         int id;
@@ -64,6 +79,7 @@ public class DBInterface {
     }catch(Exception e){
         e.printStackTrace();
     }
+    TempoDB.close();
     return new ArrayList<SaidaDB>();
     }
 }
