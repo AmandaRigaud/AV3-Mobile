@@ -52,6 +52,8 @@ public class DailyAdapter  extends RecyclerView.Adapter<DailyAdapter.ViewHolder>
             layoutManagerTwo = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             weekTempRecycler.setLayoutManager(layoutManagerOne);
             dayTempRecycler.setLayoutManager(layoutManagerTwo);
+            weekTempRecycler.setNestedScrollingEnabled(true);
+            dayTempRecycler.setNestedScrollingEnabled(true);
         }
     }
 
@@ -67,40 +69,25 @@ public class DailyAdapter  extends RecyclerView.Adapter<DailyAdapter.ViewHolder>
         Meteo meteo = meteos.get(position);
         Daily daily = meteo.getDaily();
         Hourly hourly = meteo.getHourly();
-        GetWeatherPropertyValues proper = new GetWeatherPropertyValues();
-
-        String weat = "OK!";
+        WeatherCodes weat = new WeatherCodes();
 
         //2023-06-13T00:00
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:'00'");
         String currentDateTime = sdf.format(new Date());
         List<String> timeLH = hourly.getTimeList();
 
+        String[] sunset = daily.getSunset(0).split("T");
+        String[] sunrise = daily.getSunrise(0).split("T");
         int index = timeLH.indexOf('"' + currentDateTime + '"');
 
-        System.out.print("List Time: ");
-        System.out.println(timeLH);
-        System.out.println("Time 0: " + timeLH.get(0));
-        System.out.println('"' + currentDateTime + '"');
-        System.out.print("Index: ");
-        System.out.println(currentDateTime.equals(timeLH.get(0)));
-        System.out.println("Element in index: " + hourly.getTime(index));
-
-        try {
-            System.out.println("CODE_" + hourly.getWeathercode(index));
-            weat = proper.getPropValues("CODE_" + Integer.toString(index));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        holder.weatherText.setText(weat);
+        holder.weatherText.setText(weat.getCode("CODE_"+hourly.getWeathercode(index)));
         holder.actuTemperatureText.setText(hourly.getTemperature_2m(index));
         holder.minTempText.setText(daily.getTemperature_2m_min(0));
         holder.maxTempText.setText(daily.getTemperature_2m_max(0));
-        holder.sunriseText.setText(daily.getSunrise(0));
-        holder.sunsetText.setText(daily.getSunset(0));
+        holder.sunriseText.setText(sunset[1].substring(0, sunset[1].length() - 1));
+        holder.sunsetText.setText(sunrise[1].substring(0, sunrise[1].length() - 1));
 
-        holder.myDayAdapter = new DayTempAdapter(hourly.getTemperature_2mList().subList(index,index+24), hourly.getTimeList().subList(index,index+24), hourly.getPrecipitation_probabilityList().subList(index,index+24));
+        holder.myDayAdapter = new DayTempAdapter(hourly.getTimeList().subList(index,index+24), hourly.getTemperature_2mList().subList(index,index+24), hourly.getPrecipitation_probabilityList().subList(index,index+24));
         holder.dayTempRecycler.setAdapter(holder.myDayAdapter);
 
         holder.myWeekAdapter = new WeekTempAdapter(daily.getTimeList().subList(1, 3), daily.getTemperature_2m_maxList().subList(1, 3), daily.getTemperature_2m_minList().subList(1, 3));

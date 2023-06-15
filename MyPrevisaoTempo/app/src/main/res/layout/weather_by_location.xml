@@ -46,24 +46,45 @@
                 android:gravity="center"
                 android:layout_centerHorizontal="true">
 
-                <TextView
-                    android:id="@id/min_temp_text_view"
+                <RelativeLayout
+                    android:id="@+id/relaitveMinG"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="10sp"
-                    android:layout_toStartOf="@+id/barra_text_view"
-                    android:elevation="0.5sp"
-                    android:fontFamily="monospace"
-                    android:text="24º"
-                    android:textAlignment="textEnd"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:textSize="30sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@id/min_temp_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:elevation="0.5sp"
+                        android:fontFamily="monospace"
+                        android:text="24"
+                        android:textAlignment="textEnd"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/gc_text_view_td"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@id/min_temp_text_view"
+                        android:elevation="0.5sp"
+                        android:fontFamily="monospace"
+                        android:text="ºC"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:textSize="19sp" />
+
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/barra_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="6sp"
+                    android:layout_marginRight="8sp"
+                    android:layout_toEndOf="@+id/relaitveMinG"
                     android:elevation="0.5sp"
                     android:fontFamily="monospace"
                     android:text="-"
@@ -71,18 +92,37 @@
                     android:textAppearance="?android:textAppearanceLarge"
                     android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/max_temp_text_view"
+                <RelativeLayout
+                    android:id="@+id/relaitveMaxG"
+                    android:layout_toEndOf="@+id/barra_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10sp"
-                    android:layout_toEndOf="@+id/barra_text_view"
-                    android:elevation="0.5sp"
-                    android:fontFamily="monospace"
-                    android:text="30º"
-                    android:textAlignment="textStart"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:textSize="30sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/max_temp_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="0.5sp"
+                        android:fontFamily="monospace"
+                        android:text="30"
+                        android:textAlignment="textStart"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/gc_text_two_td"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@id/max_temp_text_view"
+                        android:elevation="0.5sp"
+                        android:fontFamily="monospace"
+                        android:text="ºC"
+                        android:textAppearance="?android:textAppearanceLarge"
+                        android:textSize="19sp" />
+
+                </RelativeLayout>
 
             </RelativeLayout>
 
@@ -172,7 +212,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/temperature_day_rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:scrollbars="horizontal"
                 android:orientation="horizontal"
                 android:layout_marginTop="15dp"/>
 
@@ -191,7 +232,8 @@
                 android:id="@+id/temperature_week_rv"
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-                android:layout_height="wrap_content"
+                android:scrollbars="horizontal"
+                android:layout_height="match_parent"
                 android:layout_marginTop="15dp"/>
 
         </LinearLayout>
