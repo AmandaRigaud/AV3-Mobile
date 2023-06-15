@@ -187,14 +187,15 @@ public class MainActivity extends AppCompatActivity {
                     meteoOne.setLocal(cidade);
                     meteoOne.setDaily(newDaily);
                     meteoOne.setHourly(newHourly);
-                    DBInterface.InserirHistorico(lat, lon, cidade);
                     if(meteoMap.containsKey(cidade)){
                         meteos.set(meteoMap.get(cidade), meteoOne);
                     }else {
                         meteoMap.put(cidade, meteos.toArray().length);
                         meteos.add(meteoOne);
                     }
-
+                    if(meteoMap.get(cidade) != 0) {
+                        DBInterface.InserirHistorico(lat, lon, cidade);
+                    }
                     System.out.print("Meteo: " );
                     System.out.println(meteoOne);
                     System.out.println("Local: " + meteoOne.getLocal());
