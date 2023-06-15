@@ -43,7 +43,10 @@ public class DayTempAdapter extends RecyclerView.Adapter<DayTempAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position){
+        System.out.println("Time DayTemp: " + time.get(position));
         String[] hourS = time.get(position).split("T");
+        System.out.print("HourS DayTemp: " );
+        System.out.println(hourS);
 
         holder.hourText.setText(hourS[1]+"H");
         holder.tempText.setText(temperature.get(position));
