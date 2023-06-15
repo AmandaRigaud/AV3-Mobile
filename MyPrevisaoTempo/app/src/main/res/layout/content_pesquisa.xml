@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/HistBackground"
+        android:layout_width="416dp"
+        android:layout_height="63dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Clima_Hist"
+        app:layout_constraintEnd_toEndOf="@+id/buttonClear"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="@+id/Cidade_Hist"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@color/material_dynamic_neutral80" />
+
+    <TextView
+        android:id="@+id/Cidade_Hist"
+        android:layout_width="263dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="36dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/Clima_Hist"
+        android:layout_width="219dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Cidade_Hist" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="72dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="36dp"
+        android:text="🕑"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toStartOf="@+id/Cidade_Hist"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgClima"
+        android:layout_width="43dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="61dp"
+        android:layout_marginTop="72dp"
+        app:layout_constraintEnd_toStartOf="@+id/Clima_Hist"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_cloud_24" />
+
+    <Button
+        android:id="@+id/buttonClear"
+        android:layout_width="68dp"
+        android:layout_height="67dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="12dp"
+        android:text="❌"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/Cidade_Hist"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

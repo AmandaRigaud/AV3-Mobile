@@ -11,6 +11,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -38,6 +39,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,7 +56,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,11 +76,14 @@ public class MainActivity extends AppCompatActivity {
     private TextView localText;
     private ImageButton searchButton;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter myAdapter;
+    private static RecyclerView.Adapter myAdapter;
 
-    Retrofit retrofit;
 
-    ArrayList<Meteo> meteos = new ArrayList<Meteo>();
+    static Retrofit retrofit;
+    private ImageButton btn_home;
+    static ArrayList<Meteo> meteos = new ArrayList<Meteo>();
+    public static HashMap<String, Integer> meteoMap = new HashMap<String,Integer>();
+  
     int pagePosition;
 
     @Override
@@ -84,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         localText = findViewById(R.id.user_name_text_view);
         recyclerView = findViewById(R.id.recycler_main_view);
+
         load = findViewById(R.id.loadingPanel);
         searchButton = findViewById(R.id.btn_search);
 
@@ -98,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
 
         load.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
+      
+        Context c = this;
+        DBInterface.setPath(c.getFilesDir().toString());
+        DBInterface.criarBanco();
 
         myAdapter = new DailyAdapter(meteos);
         recyclerView.setAdapter(myAdapter);
@@ -107,6 +121,15 @@ public class MainActivity extends AppCompatActivity {
         retrofit = new Retrofit.Builder().baseUrl("https://api.open-meteo.com/v1/").addConverterFactory(GsonConverterFactory.create()).build();
 
         setSupportActionBar(findViewById(R.id.toolBar));
+        btn_home = findViewById(R.id.btn_home);
+      
+        btn_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,Pesquisa.class);
+                startActivity(intent);
+            }
+        });
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
@@ -126,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
 
         load.setVisibility(View.GONE);
         recyclerView.setVisibility(View.VISIBLE);
+  
+        FillMeteo();
     }
 
     @Override
@@ -133,6 +158,18 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    private void FillMeteo(){
+        ArrayList<SaidaDB> Historico = DBInterface.ReturnList();
+        System.out.println("Pelo Menos Entrou");
+        System.out.println(Historico.size());
+        for( SaidaDB Item : Historico){
+            System.out.println("Enchendo Meteo" + Item.Cidade);
+            GetWeatherRetrifit(Item.Latitude, Item.Longitude);
+        }
+        myAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -161,7 +198,12 @@ public class MainActivity extends AppCompatActivity {
         MeteoService meteoService = retrofit.create(MeteoService.class);
         String latLon = lat + ","+ lon;
         Geocoder geo = new Geocoder();
-        geo.atCallGeo(latLon);
+
+        CompletableFuture<String> taskGeo = CompletableFuture.supplyAsync(() -> {
+            geo.atCallGeo(latLon);
+            return geo.lastLocation;
+        });
+        String cidade = taskGeo.join();
         Meteo meteoOne = new Meteo(null, lat, lon, null, null);
         Call<JsonObject> call = meteoService.GetWeatherJson(lat, lon);
 
@@ -216,11 +258,16 @@ public class MainActivity extends AppCompatActivity {
 
                     Hourly newHourly = new Hourly(timeList2, temperature_2mList2, precipitation_probabilityList, weathercodeList);
 
+                    meteoOne.setLocal(cidade);
                     meteoOne.setDaily(newDaily);
                     meteoOne.setHourly(newHourly);
-                    meteoOne.setLocal(geo.getLocal());
 
                     //TODO: Verificar se o obj já existe na lista. Se sim, atualizar. Se não, add.
+  
+                    if (meteos.size() == 0) {
+                        meteos.add(meteoOne);
+                    }
+
                     meteos.add(meteoOne);
 
                     System.out.print("Meteo: " );
@@ -239,7 +286,171 @@ public class MainActivity extends AppCompatActivity {
         }));
     }
 
-    @SuppressLint("MissingPermission")
+
+
+    public static CompletableFuture<String[]> GetWeatherRetrifit(String lat, String lon, String city) {
+        MeteoService meteoService = retrofit.create(MeteoService.class);
+        String latLon = lat + "," + lon;
+        Meteo meteoOne = new Meteo(null, lat, lon, null, null);
+        Call<JsonObject> call = meteoService.GetWeatherJson(lat, lon);
+
+        CompletableFuture<String[]> future = new CompletableFuture<>();
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                System.out.println("Call GetW: " + call.request());
+                if (response.isSuccessful()) {
+                    List<String> timeList = new ArrayList<String>();
+                    List<String> temperature_2mList = new ArrayList<String>();
+                    List<String> precipitation_probabilityList = new ArrayList<String>();
+                    List<String> weathercodeList = new ArrayList<String>();
+                    List<String> temperature_1mList = new ArrayList<String>();
+                    List<String> sunriseList = new ArrayList<String>();
+                    List<String> sunsetList = new ArrayList<String>();
+
+                    System.out.println(response.body());
+                    JsonObject meteo = response.body();
+                    JsonArray timeH = meteo.get("hourly").getAsJsonObject().get("time").getAsJsonArray();
+                    JsonArray temperatureH = meteo.get("hourly").getAsJsonObject().get("temperature_2m").getAsJsonArray();
+                    JsonArray precipitation_probabilityH = meteo.get("hourly").getAsJsonObject().get("precipitation_probability").getAsJsonArray();
+                    JsonArray weathercodeH = meteo.get("hourly").getAsJsonObject().get("weathercode").getAsJsonArray();
+                    JsonArray timeD = meteo.get("daily").getAsJsonObject().get("time").getAsJsonArray();
+                    JsonArray temperatureMaxD = meteo.get("daily").getAsJsonObject().get("temperature_2m_max").getAsJsonArray();
+                    JsonArray temperatureMinD = meteo.get("daily").getAsJsonObject().get("temperature_2m_min").getAsJsonArray();
+                    JsonArray sunriseD = meteo.get("daily").getAsJsonObject().get("sunrise").getAsJsonArray();
+                    JsonArray sunsetD = meteo.get("daily").getAsJsonObject().get("sunset").getAsJsonArray();
+
+                    for (int i = 0; i < timeD.size(); i++) {
+                        timeList.add(timeD.get(i).toString());
+                        temperature_2mList.add(temperatureMaxD.get(i).toString());
+                        temperature_1mList.add(temperatureMinD.get(i).toString());
+                        sunriseList.add(sunriseD.get(i).toString());
+                        sunsetList.add(sunsetD.get(i).toString());
+                    }
+
+                    Daily newDaily = new Daily(timeList, temperature_2mList, temperature_1mList, sunriseList, sunsetList);
+
+                    timeList.clear();
+                    temperature_2mList.clear();
+
+                    for (int j = 0; j < timeH.size(); j++) {
+                        timeList.add(timeH.get(j).toString());
+                        temperature_2mList.add(temperatureH.get(j).toString());
+                        precipitation_probabilityList.add(precipitation_probabilityH.get(j).toString());
+                        weathercodeList.add(weathercodeH.get(j).toString());
+                    }
+
+                    Hourly newHourly = new Hourly(timeList, temperature_2mList, precipitation_probabilityList, weathercodeList);
+
+                    meteoOne.setLocal(city);
+                    meteoOne.setDaily(newDaily);
+                    meteoOne.setHourly(newHourly);
+                    DBInterface.InserirHistorico(lat, lon, city);
+                    meteos.set(0, meteoOne);
+                    System.out.print("Meteo: ");
+                    System.out.println(meteoOne);
+                    System.out.println("Local: " + meteoOne.getLocal());
+
+                    myAdapter.notifyDataSetChanged();
+
+                    future.complete(null);
+                }
+
+
+        }
+
+        @Override
+        public void onFailure(Call<JsonObject> call, Throwable t) {
+            future.completeExceptionally(t);
+        }
+    });
+
+    return future;
+}
+
+    public static CompletableFuture<String[]> GetWeatherRetrifit(String lat, String lon, String city, int loc) {
+        MeteoService meteoService = retrofit.create(MeteoService.class);
+        String latLon = lat + "," + lon;
+        Meteo meteoOne = new Meteo(null, lat, lon, null, null);
+        Call<JsonObject> call = meteoService.GetWeatherJson(lat, lon);
+
+        CompletableFuture<String[]> future = new CompletableFuture<>();
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                System.out.println("Call GetW: " + call.request());
+                if (response.isSuccessful()) {
+                    List<String> timeList = new ArrayList<String>();
+                    List<String> temperature_2mList = new ArrayList<String>();
+                    List<String> precipitation_probabilityList = new ArrayList<String>();
+                    List<String> weathercodeList = new ArrayList<String>();
+                    List<String> temperature_1mList = new ArrayList<String>();
+                    List<String> sunriseList = new ArrayList<String>();
+                    List<String> sunsetList = new ArrayList<String>();
+
+                    System.out.println(response.body());
+                    JsonObject meteo = response.body();
+                    JsonArray timeH = meteo.get("hourly").getAsJsonObject().get("time").getAsJsonArray();
+                    JsonArray temperatureH = meteo.get("hourly").getAsJsonObject().get("temperature_2m").getAsJsonArray();
+                    JsonArray precipitation_probabilityH = meteo.get("hourly").getAsJsonObject().get("precipitation_probability").getAsJsonArray();
+                    JsonArray weathercodeH = meteo.get("hourly").getAsJsonObject().get("weathercode").getAsJsonArray();
+                    JsonArray timeD = meteo.get("daily").getAsJsonObject().get("time").getAsJsonArray();
+                    JsonArray temperatureMaxD = meteo.get("daily").getAsJsonObject().get("temperature_2m_max").getAsJsonArray();
+                    JsonArray temperatureMinD = meteo.get("daily").getAsJsonObject().get("temperature_2m_min").getAsJsonArray();
+                    JsonArray sunriseD = meteo.get("daily").getAsJsonObject().get("sunrise").getAsJsonArray();
+                    JsonArray sunsetD = meteo.get("daily").getAsJsonObject().get("sunset").getAsJsonArray();
+
+                    for (int i = 0; i < timeD.size(); i++) {
+                        timeList.add(timeD.get(i).toString());
+                        temperature_2mList.add(temperatureMaxD.get(i).toString());
+                        temperature_1mList.add(temperatureMinD.get(i).toString());
+                        sunriseList.add(sunriseD.get(i).toString());
+                        sunsetList.add(sunsetD.get(i).toString());
+                    }
+
+                    Daily newDaily = new Daily(timeList, temperature_2mList, temperature_1mList, sunriseList, sunsetList);
+
+                    timeList.clear();
+                    temperature_2mList.clear();
+
+                    for (int j = 0; j < timeH.size(); j++) {
+                        timeList.add(timeH.get(j).toString());
+                        temperature_2mList.add(temperatureH.get(j).toString());
+                        precipitation_probabilityList.add(precipitation_probabilityH.get(j).toString());
+                        weathercodeList.add(weathercodeH.get(j).toString());
+                    }
+
+                    Hourly newHourly = new Hourly(timeList, temperature_2mList, precipitation_probabilityList, weathercodeList);
+
+                    meteoOne.setLocal(city);
+                    meteoOne.setDaily(newDaily);
+                    meteoOne.setHourly(newHourly);
+                   // DBInterface.InserirHistorico(lat, lon, city);
+                    meteos.set(0, meteoOne);
+                    System.out.print("Meteo: ");
+                    System.out.println(meteoOne);
+                    System.out.println("Local: " + meteoOne.getLocal());
+
+                    myAdapter.notifyDataSetChanged();
+
+                    future.complete(null);
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                future.completeExceptionally(t);
+            }
+        });
+
+        return future;
+    }
+
+                    @SuppressLint("MissingPermission")
     private void getLastLocation() {
 
         if (checkPermissions()) {
@@ -253,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             System.out.println("Latitude On: " + location.getLatitude());
                             System.out.println("Longitude On: " + location.getLongitude());
-                            GetWeatherRetrifit(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()));
+                            GetWeatherRetrifit(Double.toString(location.getLatitude()), Double.toString(location.getLongitude()), "Local Atual", 1);
                         }
                     }
                 });
@@ -291,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
             Location mLastLocation = locationResult.getLastLocation();
             System.out.println("Latitude Location: " + mLastLocation.getLatitude());
             System.out.println("Longitude Location: " + mLastLocation.getLongitude());
-            GetWeatherRetrifit(Double.toString(mLastLocation.getLatitude()), Double.toString(mLastLocation.getLongitude()));
+           GetWeatherRetrifit(Double.toString(mLastLocation.getLatitude()), Double.toString(mLastLocation.getLongitude()));
         }
     };
 
@@ -319,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == PERMISSION_ID) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation();
+               // getLastLocation();
             }
         }
     }
@@ -328,7 +539,10 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if (checkPermissions()) {
-            getLastLocation();
+            //getLastLocation();
+            for (Meteo item: meteos){
+                System.out.println(item.getLatitude());
+            }
         }
     }
 

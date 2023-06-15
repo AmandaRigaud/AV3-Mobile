@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Pesquisa">
+
+
+   <!-- <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_pesquisa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" /> -->
+
+    <EditText
+        android:id="@+id/edit_city"
+        android:layout_width="299dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:text="Nome da Cidade"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="68dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="40dp"
+        android:text="🔎"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/edit_city"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!-- app:layout_constraintBottom_toTopOf="@+id/recycler_pesquisa" -->
+
+    <EditText
+        android:id="@+id/edit_state"
+        android:layout_width="299dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="12dp"
+        android:text="Estado"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_city" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

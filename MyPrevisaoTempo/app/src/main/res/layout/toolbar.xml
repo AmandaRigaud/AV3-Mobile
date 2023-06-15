@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,15 +16,18 @@
             android:id="@+id/btn_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="0"
             android:backgroundTint="@null"
-            android:layout_gravity="center_vertical"
+            android:backgroundTintMode="add"
             android:contentDescription="home image"
             android:minWidth="55dp"
             android:minHeight="55dp"
             android:scaleX="1.5"
             android:scaleY="1.5"
-            android:src="@drawable/baseline_add_white" />
+            android:src="@drawable/baseline_add_white"
+            android:tintMode="src_in"
+            app:tint="#AF7C7C" />
 
         <View
             android:layout_width="0dp"
