@@ -53,8 +53,6 @@ public class DailyAdapter  extends RecyclerView.Adapter<DailyAdapter.ViewHolder>
             layoutManagerTwo = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
             weekTempRecycler.setLayoutManager(layoutManagerOne);
             dayTempRecycler.setLayoutManager(layoutManagerTwo);
-            //weekTempRecycler.setNestedScrollingEnabled(true);
-            //dayTempRecycler.setNestedScrollingEnabled(true);
 
             RecyclerView.OnItemTouchListener mScrollTouchListener = new RecyclerView.OnItemTouchListener(){
 
@@ -98,7 +96,6 @@ public class DailyAdapter  extends RecyclerView.Adapter<DailyAdapter.ViewHolder>
         Hourly hourly = meteo.getHourly();
         WeatherCodes weat = new WeatherCodes();
 
-        //2023-06-13T00:00
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:'00'");
         String currentDateTime = sdf.format(new Date());
         List<String> timeLH = hourly.getTimeList();

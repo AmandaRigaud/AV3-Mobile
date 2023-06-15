@@ -34,6 +34,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Looper;
 import android.provider.Settings;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,7 +47,10 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     int PERMISSION_ID = 44;
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    private TextView localText;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter myAdapter;
@@ -67,12 +72,14 @@ public class MainActivity extends AppCompatActivity {
     Retrofit retrofit;
 
     ArrayList<Meteo> meteos = new ArrayList<Meteo>();
+    int pagePosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        localText = findViewById(R.id.user_name_text_view);
         recyclerView = findViewById(R.id.recycler_main_view);
 
         myAdapter = new DailyAdapter(meteos);
@@ -86,6 +93,18 @@ public class MainActivity extends AppCompatActivity {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if(newState == RecyclerView.SCROLL_STATE_SETTLING){
+                    pagePosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+                    localText.setText(meteos.get(pagePosition).getLocal());
+
+                }
+            }
+        });
     }
 
     @Override
@@ -293,3 +312,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
+
